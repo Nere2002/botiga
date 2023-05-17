@@ -13,11 +13,6 @@ export class ProductService {
   getProducts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
-  addToCart(productId: number, userId: number): Observable<any> {
-    const url = `${this.apiUrl}/cart`;
-    const payload = { productId, userId };
 
-    return this.http.post(url, payload);
-  }
 
 }

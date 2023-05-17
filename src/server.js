@@ -133,6 +133,38 @@ app.post('/cart', (req, res) => {
   });
 });
 
+// Ruta para crear una nueva factura
+app.post('/bill', (req, res) => {
+  const { user_id, total, cart_items } = req.body;
+console.log(user_id)
+  // Insertar la factura en la tabla 'factura'
+  const billQuery = 'INSERT INTO factura (user_id, total) VALUES (?, ?)';
+  connection.query(billQuery, [user_id, total], (err, result) => {
+    if (err) {
+      console.error('Error al insertar la factura en la base de datos:', err);
+      res.json(500).json({ error: 'Error al crear la factura' });
+      return;
+    }
+
+    const factura_id = result.insertId;
+
+    // Insertar los productos del carrito en la tabla 'cart'
+    const cartQuery = 'INSERT INTO cart (user_id, product_id, quantity, factura_id) VALUES (?, ?, ?, ?)';
+    cart_items.forEach(cartItem => {
+      const { product_id, quantity } = cartItem;
+      connection.query(cartQuery, [user_id, product_id, quantity, factura_id], (err) => {
+        if (err) {
+          console.error('Error al insertar el producto en el carrito en la base de datos:', err);
+          res.json(500).json({ error: 'Error al crear la factura' });
+          return;
+        }
+      });
+    });
+
+    res.json(200).json({ message: 'Factura creada exitosamente' });
+  });
+});
+
 
 
 app.listen(3000, () => {
