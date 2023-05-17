@@ -1,0 +1,31 @@
+<p>welcome works!</p>
+
+<H1>INICIO EXITOSO</H1>
+
+
+  <div class="cart-container">
+    <h2>Carrito de Compras</h2>
+    <table class="cart-table">
+      <!-- ... Resto del código del carrito ... -->
+        <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th></th>
+        </tr>
+        </thead>
+      <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.price }}</td>
+        <td>
+          <button (click)="addToCart(product.id, userId)">Agregar al carrito</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
