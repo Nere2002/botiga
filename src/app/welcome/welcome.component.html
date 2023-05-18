@@ -21,11 +21,19 @@
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
         <td>
-          <button (click)="addToCart(product.id, userId)">Agregar al carrito</button>
+          <button (click)="addToCart(product.id)">Agregar al carrito</button>
         </td>
       </tr>
       </tbody>
     </table>
+    <h3>Productos en el carrito:</h3>
+    <ul>
+      <li *ngFor="let product of productsInCart">
+        {{ product.name }} - {{ product.price }}
+      </li>
+    </ul>
+    <p>Total: {{ total }}</p>
+    <button (click)="buyCart()">Comprar</button>
   </div>
 
 
