@@ -47,22 +47,16 @@ export class WelcomeComponent implements OnInit {
       this.total += +product.price;
     }
   }
-
-  buyCart(): void {
-    const cartItems = this.productsInCart.map(product => {
-      return { product_id: product.id, quantity: 1 }; // You can modify the quantity if needed
-    });
-
-    this.billService.createBill(this.userId, this.total, cartItems).subscribe(
-      response => {
-        console.log('Factura creada:', response);
-        // Aquí puedes agregar cualquier lógica adicional, como limpiar el carrito
-      },
-      error => {
-        console.error('Error al crear la factura:', error);
-      }
-    );
+  removeFromCart(productId: number): void {
+    const index = this.productsInCart.findIndex(p => p.id === productId);
+    if (index !== -1) {
+      const removedProduct = this.productsInCart.splice(index, 1)[0];
+      this.total -= +removedProduct.price;
+    }
   }
+
+
+
 
 
 }

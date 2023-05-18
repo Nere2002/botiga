@@ -11,6 +11,7 @@ export class AuthService {
   private loginUrl = 'http://localhost:3000/login';
   private apiUrl= 'http://localhost:3000/register';
   userId: number | null = null; // Inicialmente no hay un userId asignado
+  private saveUserIdUrl= ' ';
   constructor(private http: HttpClient) { }
 
 /*  login(username: string, password: string): Observable<any> {
@@ -43,29 +44,6 @@ export class AuthService {
 
     return loginObservable;
   }
-
-/*  login(username: string, password: string): Observable<any> {
-    return new Observable((observer) => {
-      this.http.post(this.loginUrl, { username, password }).subscribe({
-        next: (result: any) => {
-          if (result && result.userId) {
-            this.userId = result.userId; // Establecer el userId cuando el inicio de sesión es exitoso
-          }
-          observer.next(result);
-          observer.complete();
-        },
-        error: (error) => {
-          observer.error(error);
-        }
-      });
-    });
-  }*/
-
-  logout(): void {
-    this.userId = null; // Restablecer el userId cuando el usuario cierra sesión
-  }
-
-
 
 
 

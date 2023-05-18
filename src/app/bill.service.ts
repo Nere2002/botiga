@@ -10,12 +10,5 @@ export class BillService {
 
   constructor(private http: HttpClient) { }
 
-  createBill(userId: number, total: number, cartItems: any[]): Observable<any> {
-    const billData = {
-      user_id: userId,
-      total: total,
-      cart_items: cartItems
-    };
-    return this.http.post<any>(`${this.apiUrl}/bill`, billData);
-  }
+
 }

@@ -22,6 +22,7 @@
         <td>{{ product.price }}</td>
         <td>
           <button (click)="addToCart(product.id)">Agregar al carrito</button>
+          <button (click)="removeFromCart(product.id)">Eliminar</button>
         </td>
       </tr>
       </tbody>
@@ -33,7 +34,7 @@
       </li>
     </ul>
     <p>Total: {{ total }}</p>
-    <button (click)="buyCart()">Comprar</button>
+    <button>Comprar</button>
   </div>
 
 
