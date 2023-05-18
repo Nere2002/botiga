@@ -47,7 +47,7 @@ app.post('/register', (req, res) => {
 
   // Validar que el nombre de usuario, contraseña y correo no estén vacíos
   if (!username || !password || !email) {
-    res.status(400).send('El nombre de usuario, contraseña y correo son requeridos');
+    res.json(400).send('El nombre de usuario, contraseña y correo son requeridos');
     return;
   }
 
@@ -55,7 +55,7 @@ app.post('/register', (req, res) => {
   connection.query('SELECT * FROM usuarios WHERE username = ?', [username], (error, results) => {
     if (error) {
       console.error('Error al realizar la consulta: ', error);
-      res.status(500).send('Error al realizar la consulta');
+      res.json(500).send('Error al realizar la consulta');
       return;
     }
 
@@ -68,11 +68,11 @@ console.log(email);
     connection.query('INSERT INTO usuarios (username, password, email) VALUES (?, ?, ?)', [username, password, email], (error, results) => {
       if (error) {
         console.error('Error al insertar el nuevo usuario: ', error);
-        res.status(500).send('Error al insertar el nuevo usuario');
+        res.json(500).send('Error al insertar el nuevo usuario');
         return;
       }
 
-      res.status(201).send('Usuario registrado exitosamente');
+      res.json(201).send('Usuario registrado exitosamente');
     });
   });
 });

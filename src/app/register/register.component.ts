@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,7 @@ export class RegisterComponent {
   email: string = '';
   errorMessage: string = '';
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
   onSubmit() {
     const user = {
@@ -26,6 +27,7 @@ export class RegisterComponent {
       .subscribe(
         result => {
           console.log('Usuario registrado exitosamente');
+          this.router.navigate(['/welcome']);
         },
         error => {
           this.errorMessage = 'Error al registrar el usuario';
