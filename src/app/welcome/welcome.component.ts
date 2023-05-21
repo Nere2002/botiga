@@ -13,7 +13,7 @@ class Product {
   description= ' ';
   price= ' ';
   id!: number;
-  quantity!: number;
+  quantity=0;
 }
 
 @Component({

@@ -129,7 +129,7 @@ app.post('/bills', (req, res) => {
   });
 });
 
-// Ruta para guardar un elemento del carrito
+/*// Ruta para guardar un elemento del carrito
 app.post('/cart', (req, res) => {
   const { user_id, product_id, quantity, factura_id } = req.body;
 
@@ -146,10 +146,50 @@ app.post('/cart', (req, res) => {
         product_id,
         quantity,
         factura_id
+
         // Otras propiedades del elemento del carrito según tus necesidades
       };
 
       res.json(newCartItem);
+    }
+  });
+});*/
+
+
+app.post('/cart', (req, res) => {
+  const { user_id, product_id, quantity } = req.body;
+
+  // Obtener el ID de la última factura creada por el usuario
+  const selectInvoiceQuery = 'SELECT id FROM factura WHERE user_id = ? ORDER BY id DESC LIMIT 1';
+  connection.query(selectInvoiceQuery, [user_id], (error, results) => {
+    if (error) {
+      console.error('Error al obtener el ID de factura:', error);
+      res.status(500).json({ error: 'Error al obtener el ID de factura' });
+    } else {
+      if (results.length > 0) {
+        const factura_id = results[0].id;
+
+        const insertQuery = 'INSERT INTO cart (user_id, product_id, quantity, factura_id) VALUES (?, ?, ?, ?)';
+        connection.query(insertQuery, [user_id, product_id, quantity, factura_id], (error, results) => {
+          if (error) {
+            console.error('Error al guardar el elemento del carrito en la base de datos:', error);
+            res.status(500).json({ error: 'Error al guardar el elemento del carrito en la base de datos' });
+          } else {
+            const newCartItem = {
+              user_id,
+              product_id,
+              quantity,
+              factura_id
+              // Otras propiedades del elemento del carrito según tus necesidades
+            };
+
+            res.json(newCartItem);
+          }
+        });
+      } else {
+        console.error('No se encontró ninguna factura para el usuario');
+        res.status(500).json({ error: 'No se encontró ninguna factura para el usuario' });
+      }
     }
   });
 });
