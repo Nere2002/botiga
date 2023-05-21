@@ -1,6 +1,17 @@
-<p>welcome works!</p>
 
-<H1>INICIO EXITOSO</H1>
+<h1 class="electro-title">ElectroMundo</h1>
+
+<div class="usuario">
+  <h2>ID USUARIO: {{ this.userId  }}</h2>
+</div>
+
+<div class="search-bar">
+  <button class="search-button" click="goToPage('login')">Login</button>
+  <button class="search-button" click="goToPage('Grafico')">Gragico</button>
+  <button class="search-button" click="goToPage('Register')">Register</button>
+  <button class="search-button" click="goToPage('contacto')">Contacto</button>
+</div>
+
 
 
   <div class="cart-container">
@@ -21,8 +32,8 @@
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
         <td>
-          <button (click)="addToCart(product.id)">Agregar al carrito</button>
-          <button (click)="removeFromCart(product.id)">Eliminar</button>
+          <button class="add-to-cart-btn" (click)="addToCart(product.id)">Agregar al carrito</button>
+          <button class="remove-from-cart-btn" (click)="removeFromCart(product.id)">Eliminar</button>
         </td>
       </tr>
       </tbody>
@@ -33,8 +44,9 @@
         {{ product.name }} - {{ product.price }}
       </li>
     </ul>
-    <p>Total: {{ total }}</p>
-    <button>Comprar</button>
+    <p class="total" >Total: {{ total }}</p>
+   <!-- <button class="buy-btn" (click)="buyCart()" )>Comprar</button>-->
+
   </div>
 
 
