@@ -104,55 +104,56 @@ app.get('/products', (req, res) => {
 
 //----------------------------FACTURA Y INSERAT CARRITO ------------------------------------------------------------
 
-
-/*app.post('/api/insertar_factura', (req, res) => {
-  const { userId, total } = req.body;
+// Ruta para crear una nueva factura
+app.post('/bills', (req, res) => {
+  const { user_id, total } = req.body;
 
   const insertQuery = 'INSERT INTO factura (user_id, total) VALUES (?, ?)';
 
-  connection.query(insertQuery, [userId, total], (error, result) => {
+  connection.query(insertQuery, [user_id, total], (error, results, fields) => {
     if (error) {
-      console.error('Error al insertar la factura:', error);
-      res.status(500).send({ message: 'Error al crear la factura' });
-      return;
+      console.error('Error al guardar la factura en la base de datos: ' + error.message);
+      res.status(500).json({ error: 'Error al guardar la factura en la base de datos' });
+    } else {
+      const newBillId = results.insertId;
+
+      const newBill = {
+        id: newBillId,
+        user_id,
+        total
+        // Otras propiedades de la factura según tus necesidades
+      };
+
+      res.json(newBill);
     }
-
-    const facturaId = result.insertId;
-
-    res.status(200).json({ message: 'Factura creada exitosamente', facturaId });
   });
 });
 
-app.post('/api/insertar_cart', (req, res) => {
-  const cartItems = req.body;
-  const userId = req.session.userId; // ID del usuario actual obtenido al iniciar sesión
+// Ruta para guardar un elemento del carrito
+app.post('/cart', (req, res) => {
+  const { user_id, product_id, quantity, factura_id } = req.body;
 
-  // Obtener el ID de la última factura insertada
-  connection.query('SELECT MAX(id) AS facturaId FROM factura', (error, results) => {
+  const insertQuery = 'INSERT INTO cart (user_id, product_id, quantity, factura_id) VALUES (?, ?, ?, ?)';
+
+  connection.query(insertQuery, [user_id, product_id, quantity, factura_id], (error, results, fields) => {
     if (error) {
-      console.error('Error al obtener el ID de la última factura:', error);
-      res.status(500).send('Error al guardar el carrito');
-      return;
+      console.error('Error al guardar el elemento del carrito en la base de datos: ' + error.message);
+      res.status(500).json({ error: 'Error al guardar el elemento del carrito en la base de datos' });
+    } else {
+      const newCartItem = {
+        user_id,
+        product_id,
+        quantity,
+        factura_id
+        // Otras propiedades del elemento del carrito según tus necesidades
+      };
+
+      res.json(newCartItem);
     }
-
-    const facturaId = results[0].facturaId; // Obtener el ID de la factura
-
-    const insertQuery = 'INSERT INTO cart (user_id, product_id, quantity, factura_id) VALUES (?, ?, ?, ?)';
-
-    cartItems.forEach((cartItem) => {
-      const { product_id, quantity } = cartItem;
-      connection.query(insertQuery, [userId, product_id, quantity, facturaId], (error, result) => {
-        if (error) {
-          console.error('Error al insertar el producto en el carrito:', error);
-          res.status(500).send('Error al guardar el carrito');
-          return;
-        }
-      });
-    });
-
-    res.status(200).send('Carrito guardado exitosamente');
   });
-});*/
+});
+
+
 
 
 

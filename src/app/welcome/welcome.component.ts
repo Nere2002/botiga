@@ -83,22 +83,62 @@ export class WelcomeComponent implements OnInit {
   }
 
 
-/*  buyCart(): void {
-    // Realizar la compra del carrito
-    const data = { userId: this.userId, total: this.total };
+// ----------------------------- AÑADIR AL CARRITO -----------------------------------------------
 
-    // Enviar la factura al servidor
-    this.http.post<any>('/api/insertar_factura', data).subscribe(response => {
-      // Obtener el ID de la factura creada
-      const facturaId = response.facturaId;
+  buyCart(): void {
+    // Create a new invoice with the user ID and total
+    const invoice = {
+      user_id: this.userId,
+      total: this.total
+      // Add other invoice properties if needed
+    };
 
-      // Guardar los productos del carrito en el servidor
-      this.http.post('/api/insertar_cart', this.productsInCart).subscribe(response => {
-        console.log(response); // Mostrar mensaje de éxito o realizar otras acciones necesarias
-        // ...
-      });
-    });
-  }*/
+    // Make a POST request to save the invoice to the database
+    this.billService.createInvoice(invoice)
+      .subscribe(
+        (invoiceId: number) => {
+          // Invoice created successfully, save the cart items
+          this.saveCartItems(invoiceId);
+        },
+        error => {
+          console.error('Error creating invoice:', error);
+        }
+      );
+  }
+
+  saveCartItems(invoiceId: number): void {
+    // Iterate over the cart items and save each item to the database
+    for (const product of this.productsInCart) {
+      const cartItem = {
+        user_id: this.userId,
+        product_id: product.id,
+        quantity: 1, // You can modify this according to your requirements
+        factura_id: invoiceId
+        // Add other cart item properties if needed
+      };
+
+      // Make a POST request to save the cart item to the database
+      this.cartService.addToCart(cartItem)
+        .subscribe(
+          () => {
+            // Cart item saved successfully
+            console.log('Cart item saved:', cartItem);
+          },
+          error => {
+            console.error('Error saving cart item:', error);
+          }
+        );
+    }
+
+    // Clear the cart after saving the items
+    this.clearCart();
+  }
+
+  clearCart(): void {
+    this.productsInCart = [];
+    this.total = 0;
+  }
+
 
 
 

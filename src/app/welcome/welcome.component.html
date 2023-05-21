@@ -4,16 +4,6 @@
 <div class="usuario">
   <h2>ID USUARIO: {{ this.userId  }}</h2>
 </div>
-
-<div class="search-bar">
-  <button class="search-button" click="goToPage('login')">Login</button>
-  <button class="search-button" click="goToPage('Grafico')">Gragico</button>
-  <button class="search-button" click="goToPage('Register')">Register</button>
-  <button class="search-button" click="goToPage('contacto')">Contacto</button>
-</div>
-
-
-
   <div class="cart-container">
     <h2>Carrito de Compras</h2>
     <table class="cart-table">
@@ -45,8 +35,7 @@
       </li>
     </ul>
     <p class="total" >Total: {{ total }}</p>
-   <!-- <button class="buy-btn" (click)="buyCart()" )>Comprar</button>-->
-
+    <button class="buy-btn" (click)="buyCart()">Comprar</button>
   </div>
 
 
