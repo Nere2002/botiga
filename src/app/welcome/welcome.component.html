@@ -22,7 +22,7 @@
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
         <td>
-          <button class="add-to-cart-btn" (click)="addToCart(product.id)">Agregar al carrito</button>
+          <button class="add-to-cart-btn" (click)="addToCart(product.id, 1)">Agregar al carrito</button>
           <button class="remove-from-cart-btn" (click)="removeFromCart(product.id)">Eliminar</button>
         </td>
       </tr>
@@ -31,7 +31,7 @@
     <h3>Productos en el carrito:</h3>
     <ul>
       <li *ngFor="let product of productsInCart">
-        {{ product.name }} - {{ product.price }}
+        {{ product.name }} - {{ product.price }} - Cantidad: {{ product.quantity }}
       </li>
     </ul>
     <p class="total" >Total: {{ total }}</p>

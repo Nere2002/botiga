@@ -135,7 +135,8 @@ app.post('/cart', (req, res) => {
 
   const insertQuery = 'INSERT INTO cart (user_id, product_id, quantity, factura_id) VALUES (?, ?, ?, ?)';
 
-  connection.query(insertQuery, [user_id, product_id, quantity, factura_id], (error, results, fields) => {
+  connection.query(insertQuery, [user_id, product_id, quantity, factura_id], (error, results) => {
+
     if (error) {
       console.error('Error al guardar el elemento del carrito en la base de datos: ' + error.message);
       res.status(500).json({ error: 'Error al guardar el elemento del carrito en la base de datos' });

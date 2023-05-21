@@ -13,6 +13,7 @@ class Product {
   description= ' ';
   price= ' ';
   id!: number;
+  quantity!: number;
 }
 
 @Component({
@@ -25,6 +26,7 @@ export class WelcomeComponent implements OnInit {
   productsInCart: Product[] = [];
   total: number = 0;
   userId: any;
+  quantity: number=0;
 
 
   constructor(
@@ -64,11 +66,28 @@ export class WelcomeComponent implements OnInit {
     );
 
   }
-  addToCart(productId: number): void {
+/*  addToCart(productId: number): void {
     const product = this.products.find(p => p.id === productId);
     if (product) {
       this.productsInCart.push(product);
       this.total += +product.price;
+    }
+  }*/
+
+  addToCart(productId: number, quantity: number): void {
+    const product = this.products.find(p => p.id === productId);
+    if (product) {
+      // Verificar si el producto ya está en el carrito
+      const existingProduct = this.productsInCart.find(p => p.id === product.id);
+      if (existingProduct) {
+        // Si el producto ya está en el carrito, actualizar la cantidad
+        existingProduct.quantity += quantity;
+      } else {
+        // Si el producto no está en el carrito, añadirlo con la cantidad
+        product.quantity = quantity;
+        this.productsInCart.push(product);
+      }
+      this.total += +product.price * quantity;
     }
   }
 
@@ -88,7 +107,7 @@ export class WelcomeComponent implements OnInit {
   buyCart(): void {
     // Create a new invoice with the user ID and total
     const invoice = {
-      user_id: this.userId,
+      user_id: this.authService.userId,
       total: this.total
       // Add other invoice properties if needed
     };
@@ -110,9 +129,9 @@ export class WelcomeComponent implements OnInit {
     // Iterate over the cart items and save each item to the database
     for (const product of this.productsInCart) {
       const cartItem = {
-        user_id: this.userId,
+        user_id: this.authService.userId,
         product_id: product.id,
-        quantity: 1, // You can modify this according to your requirements
+        quantity: this.quantity, // You can modify this according to your requirements
         factura_id: invoiceId
         // Add other cart item properties if needed
       };
