@@ -14,12 +14,13 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
+
   onSubmit() {
-    console.log("onsubmit");
     this.authService.login(this.username, this.password)
       .subscribe(
         result => {
-          console.log("result")
+          console.log(result);
+          this.authService.userId = result.userId; // Guarda el ID del usuario en el servicio AuthService
           this.router.navigate(['/welcome']);
         },
         error => {

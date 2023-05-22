@@ -1,3 +1,9 @@
+
+<h1 class="electro-title">ElectroMundo</h1>
+
+<div class="usuario">
+  <h2>ID USUARIO: {{ this.userId  }}</h2>
+</div>
   <div class="cart-container">
     <h2>Carrito de Compras</h2>
     <table class="cart-table">
@@ -16,8 +22,8 @@
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
         <td>
-          <button (click)="addToCart(product.id)">Agregar al carrito</button>
-          <button (click)="removeFromCart(product.id)">Eliminar</button>
+          <button class="add-to-cart-btn" (click)="addToCart(product.id, 1)">Agregar al carrito</button>
+          <button class="remove-from-cart-btn" (click)="removeFromCart(product.id)">Eliminar</button>
         </td>
       </tr>
       </tbody>
@@ -25,11 +31,11 @@
     <h3>Productos en el carrito:</h3>
     <ul>
       <li *ngFor="let product of productsInCart">
-        {{ product.name }} - {{ product.price }}
+        {{ product.name }} - {{ product.price }} - Cantidad: {{ product.quantity }}
       </li>
     </ul>
-    <p>Total: {{ total }}</p>
-    <button>Comprar</button>
+    <p class="total" >Total: {{ total }}</p>
+    <button class="buy-btn" (click)="buyCart()">Comprar</button>
   </div>
 
 
