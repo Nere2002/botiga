@@ -13,6 +13,7 @@
           <th>Producto</th>
           <th>Descripción</th>
           <th>Precio</th>
+          <th>CryptoMoneda</th>
           <th></th>
         </tr>
         </thead>
@@ -21,8 +22,9 @@
         <td>{{ product.name }}</td>
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
+        <td>{{ product.cryptoPrice }}</td>
         <td>
-          <button class="add-to-cart-btn" (click)="addToCart(product.id, 1)">Agregar al carrito</button>
+          <button class="add-to-cart-btn" (click)="addToCart(product.id, 1)">Agregar</button>
           <button class="remove-from-cart-btn" (click)="removeFromCart(product.id)">Eliminar</button>
         </td>
       </tr>

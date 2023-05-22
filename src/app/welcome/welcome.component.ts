@@ -14,6 +14,7 @@ class Product {
   price= ' ';
   id!: number;
   quantity=0;
+  cryptoPrice!: number;
 }
 
 @Component({
@@ -65,14 +66,10 @@ export class WelcomeComponent implements OnInit {
       }
     );
 
+    this.getBitcoinPriceInEuros();
+
   }
-/*  addToCart(productId: number): void {
-    const product = this.products.find(p => p.id === productId);
-    if (product) {
-      this.productsInCart.push(product);
-      this.total += +product.price;
-    }
-  }*/
+// ------------------------ AÑADIR CARRITO ---------------------------------
 
   addToCart(productId: number, quantity: number): void {
     const product = this.products.find(p => p.id === productId);
@@ -88,15 +85,58 @@ export class WelcomeComponent implements OnInit {
         this.productsInCart.push(product);
 
       }
-      this.total += +product.price * quantity;
-      this.quantityTotal+= quantity;
+
+    /*  this.total += +product.price * quantity;
+      this.quantityTotal+= quantity;*/
+
     }
+  }
+
+  // ----------------------------- CRIPTOMONEDA --------------------------------
+
+/*  getCryptoCurrencyValue(): void {
+    const apiUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=USD'; // Reemplaza con la URL real de la API de precios de criptomonedas
+
+    this.http.get(apiUrl).subscribe(
+      (response: any) => {
+        // Aquí puedes procesar la respuesta de la API y obtener el valor de la criptomoneda deseada
+        //const cryptoValue = response.price; // Asegúrate de ajustar esto según la estructura de datos de la respuesta de la API
+        const cryptoValue = response.bitcoin.usd; // Asegúrate de ajustar esto según la estructura de datos de la respuesta de la API
+        // Actualiza el valor de la criptomoneda en tu componente
+        this.cryptoValue = cryptoValue;
+      },
+      error => {
+        console.error('Error al obtener el valor de la criptomoneda:', error);
+      }
+    );
+  }*/
+
+  getBitcoinPriceInEuros(): void {
+    const apiUrl = 'https://api.coincap.io/v2/assets/bitcoin';
+
+    this.http.get(apiUrl).subscribe(
+      (response: any) => {
+        const bitcoinPriceInEuros = response?.data?.priceUsd; // CoinCap devuelve el precio de Bitcoin en dólares, asumiendo que se utiliza como referencia para calcular el precio en euros
+        this.calculateProductCryptoPrices(bitcoinPriceInEuros);
+      },
+      error => {
+        console.error('Error al obtener el precio de Bitcoin:', error);
+      }
+    );
+  }
+
+  calculateProductCryptoPrices(bitcoinPriceInEuros: number): void {
+    this.products.forEach(product => {
+      const productCryptoPrice = +product.price / bitcoinPriceInEuros;
+      product.cryptoPrice = productCryptoPrice; // Agregar el valor en bitcoins al producto
+    });
   }
 
 
 
 
 
+// ---------------------------- Borrar carrito -----------------------------
   removeFromCart(productId: number): void {
     const index = this.productsInCart.findIndex(p => p.id === productId);
     if (index !== -1) {
@@ -107,6 +147,7 @@ export class WelcomeComponent implements OnInit {
 
 
 // ----------------------------- AÑADIR AL CARRITO -----------------------------------------------
+  cryptoValue: any;
 
   buyCart(): void {
     // Create a new invoice with the user ID and total
