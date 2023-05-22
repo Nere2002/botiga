@@ -26,7 +26,7 @@ export class WelcomeComponent implements OnInit {
   productsInCart: Product[] = [];
   total: number = 0;
   userId: any;
-  quantity: number=0;
+  quantityTotal: number=0;
 
 
   constructor(
@@ -52,7 +52,7 @@ export class WelcomeComponent implements OnInit {
         error => {
           console.error('Error al obtener los productos:', error);
         }
-      );
+      )
 
     //this.userId = this.authService.getUserId();
 
@@ -86,10 +86,14 @@ export class WelcomeComponent implements OnInit {
         // Si el producto no está en el carrito, añadirlo con la cantidad
         product.quantity = quantity;
         this.productsInCart.push(product);
+
       }
       this.total += +product.price * quantity;
+      this.quantityTotal+= quantity;
     }
   }
+
+
 
 
 
@@ -131,7 +135,7 @@ export class WelcomeComponent implements OnInit {
       const cartItem = {
         user_id: this.authService.userId,
         product_id: product.id,
-        quantity: this.quantity, // You can modify this according to your requirements
+        quantity: product.quantity, // You can modify this according to your requirements
         factura_id: invoiceId
         // Add other cart item properties if needed
       };
@@ -151,7 +155,7 @@ export class WelcomeComponent implements OnInit {
 
     // Clear the cart after saving the items
     this.clearCart();
-  }
+}
 
   clearCart(): void {
     this.productsInCart = [];
