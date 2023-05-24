@@ -5,6 +5,7 @@ import {BillService} from "../bill.service";
 import { AuthService } from "../auth.service";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {WalletService} from "../wallet.service";
 
 
 
@@ -36,7 +37,8 @@ export class WelcomeComponent implements OnInit {
       private billService: BillService,
       private authService: AuthService,
       private router: Router,
-      private http: HttpClient
+      private http: HttpClient,
+      private walletService:WalletService
 
   ) { }
 
@@ -86,30 +88,15 @@ export class WelcomeComponent implements OnInit {
 
       }
 
-    /*  this.total += +product.price * quantity;
-      this.quantityTotal+= quantity;*/
+      this.total += +product.price * quantity;
+      this.quantityTotal+= quantity;
 
     }
   }
 
   // ----------------------------- CRIPTOMONEDA --------------------------------
 
-/*  getCryptoCurrencyValue(): void {
-    const apiUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=USD'; // Reemplaza con la URL real de la API de precios de criptomonedas
 
-    this.http.get(apiUrl).subscribe(
-      (response: any) => {
-        // Aquí puedes procesar la respuesta de la API y obtener el valor de la criptomoneda deseada
-        //const cryptoValue = response.price; // Asegúrate de ajustar esto según la estructura de datos de la respuesta de la API
-        const cryptoValue = response.bitcoin.usd; // Asegúrate de ajustar esto según la estructura de datos de la respuesta de la API
-        // Actualiza el valor de la criptomoneda en tu componente
-        this.cryptoValue = cryptoValue;
-      },
-      error => {
-        console.error('Error al obtener el valor de la criptomoneda:', error);
-      }
-    );
-  }*/
 
   getBitcoinPriceInEuros(): void {
     const apiUrl = 'https://api.coincap.io/v2/assets/bitcoin';
@@ -203,7 +190,12 @@ export class WelcomeComponent implements OnInit {
     this.total = 0;
   }
 
-
+  openWallet(): void {
+    const isAuthenticated = this.walletService.isAuthenticated(); // Verificar si el usuario ya está autenticado en la wallet
+    if (!isAuthenticated) {
+      window.open('https://www.chivowallet.com/wallet/login', '_blank'); // Abrir la página de inicio de sesión de la wallet en una nueva ventana o pestaña
+    }
+  }
 
 
 

@@ -8,13 +8,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { WelcomeComponent } from './welcome/welcome.component';
 import {FormsModule} from "@angular/forms";
 import { RegisterComponent } from './register/register.component';
+import { FormularioComponent } from './formulario/formulario.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     WelcomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    FormularioComponent
   ],
   imports: [
     BrowserModule,
