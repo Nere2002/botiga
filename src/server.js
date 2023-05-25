@@ -51,7 +51,8 @@ app.post('/login', (req, res) => {
 
       // Almacena el ID del usuario en la sesión
       req.session.userId = userId;
-
+      const logMessage = `Timestamp: ${new Date().toLocaleString()}, User: ${username}, Action: Login\n`;
+      fs.appendFileSync('log.txt', logMessage);
 
       res.json({ success: true, userId: req.session.userId }); // Devuelve el ID del usuario al cliente
     }
@@ -88,7 +89,8 @@ console.log(email);
         res.json(500).send('Error al insertar el nuevo usuario');
         return;
       }
-
+      const logMessage = `Timestamp: ${new Date().toLocaleString()}, User: ${username}, Action: Register\n`;
+      fs.appendFileSync('log.txt', logMessage);
       res.json(201).send('Usuario registrado exitosamente');
     });
   });
