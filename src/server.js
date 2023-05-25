@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
 const session = require('express-session');
+const fs = require('fs');
+const router = express.Router();
+
 
 const app = express();
 
@@ -91,6 +94,47 @@ console.log(email);
   });
 });
 
+//-------------------- logs guardar ---------------------
+
+app.post('/logs', (req, res) => {
+  const { logEntry } = req.body;
+
+  // Escribe el logEntry en el archivo
+  fs.appendFile('logs.txt', logEntry + '\n', (err) => {
+    if (err) {
+      console.error('Error al escribir en el archivo de logs:', err);
+      res.json(500).send('Error al escribir en el archivo de logs');
+    } else {
+      console.log('Log guardado exitosamente:', logEntry);
+      res.json(200);
+    }
+  });
+});
+
+// --------------------- Guardar formulario -----------------------
+
+router.post('/guardar-consulta', (req, res) => {
+  const { nombre, email, consulta } = req.body;
+
+  // Generar un nombre de archivo único para cada consulta
+  const nombreArchivo = `${Date.now()}.txt`;
+
+  // Guardar los datos del formulario en el archivo
+  const contenidoArchivo = `Nombre: ${nombre}\nEmail: ${email}\nConsulta: ${consulta}\n`;
+
+  fs.writeFile(nombreArchivo, contenidoArchivo, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Hubo un error al guardar la consulta.' });
+    } else {
+      res.json({ message: 'La consulta se ha guardado correctamente.' });
+    }
+  });
+});
+
+module.exports = router;
+
+
 app.get('/products', (req, res) => {
   connection.query('SELECT * FROM products', (error, results) => {
     if (error) {
@@ -129,32 +173,8 @@ app.post('/bills', (req, res) => {
   });
 });
 
-/*// Ruta para guardar un elemento del carrito
-app.post('/cart', (req, res) => {
-  const { user_id, product_id, quantity, factura_id } = req.body;
 
-  const insertQuery = 'INSERT INTO cart (user_id, product_id, quantity, factura_id) VALUES (?, ?, ?, ?)';
-
-  connection.query(insertQuery, [user_id, product_id, quantity, factura_id], (error, results) => {
-
-    if (error) {
-      console.error('Error al guardar el elemento del carrito en la base de datos: ' + error.message);
-      res.status(500).json({ error: 'Error al guardar el elemento del carrito en la base de datos' });
-    } else {
-      const newCartItem = {
-        user_id,
-        product_id,
-        quantity,
-        factura_id
-
-        // Otras propiedades del elemento del carrito según tus necesidades
-      };
-
-      res.json(newCartItem);
-    }
-  });
-});*/
-
+// Ruta para guardar un elemento del carrito
 
 app.post('/cart', (req, res) => {
   const { user_id, product_id, quantity } = req.body;
