@@ -8,13 +8,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { WelcomeComponent } from './welcome/welcome.component';
 import {FormsModule} from "@angular/forms";
 import { RegisterComponent } from './register/register.component';
+import { GraficoComponent } from './grafico/grafico.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     WelcomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    GraficoComponent
   ],
   imports: [
     BrowserModule,
