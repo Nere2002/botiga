@@ -1,0 +1,33 @@
+<div class="logo-container">
+  <img src="../assets/imatges/Logo.png" alt="Logo de la empresa">
+  <h1 class="electro-title">ElectroMundo</h1>
+</div>
+
+<div class="nav-container">
+  <a routerLink="/wallet" class="nav-button">Wallet</a>
+  <a routerLink="/formulario" class="nav-button">Formulario</a>
+  <a routerLink="/grafico" class="nav-button">Grafico</a>
+  <a routerLink="/login" class="nav-button">Inicio sesion</a>
+  <a routerLink="/register" class="nav-button">Registro</a>
+</div>
+
+
+<div class="formulario-container">
+  <h2>Formulario de Consultas</h2>
+  <form (submit)="enviarConsulta()">
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" [(ngModel)]="nombre" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="email" required>
+    </div>
+    <div class="form-group">
+      <label for="consulta">Consulta:</label>
+      <textarea id="consulta" [(ngModel)]="consulta" rows="5" required></textarea>
+    </div>
+    <button type="submit">Enviar Consulta</button>
+  </form>
+</div>
+
