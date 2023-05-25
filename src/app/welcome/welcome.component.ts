@@ -7,8 +7,6 @@ import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {WalletService} from "../wallet.service";
 
-
-
 class Product {
   name= ' ' ;
   description= ' ';
