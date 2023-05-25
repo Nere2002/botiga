@@ -4,10 +4,12 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const session = require('express-session');
 const fs = require('fs');
-const router = express.Router();
-
+const multer = require('multer');
+//const router = express.Router();
 
 const app = express();
+app.use(express.json());
+
 
 // Habilitar CORS
 app.use(cors());
@@ -113,14 +115,16 @@ app.post('/logs', (req, res) => {
 
 // --------------------- Guardar formulario -----------------------
 
-router.post('/guardar-consulta', (req, res) => {
+app.use(express.json());
+app.post('/api/guardar-consulta', (req, res) => {
   const { nombre, email, consulta } = req.body;
+  console.log(nombre, email, consulta);
 
   // Generar un nombre de archivo único para cada consulta
   const nombreArchivo = `${Date.now()}.txt`;
 
   // Guardar los datos del formulario en el archivo
-  const contenidoArchivo = `Nombre: ${nombre}\nEmail: ${email}\nConsulta: ${consulta}\n`;
+  const contenidoArchivo = 'Nombre: ' + nombre + ' \nEmail: ' + email + '\nConsulta: ' + consulta + '\n';
 
   fs.writeFile(nombreArchivo, contenidoArchivo, (err) => {
     if (err) {
@@ -132,7 +136,7 @@ router.post('/guardar-consulta', (req, res) => {
   });
 });
 
-module.exports = router;
+//module.exports = router;
 
 
 app.get('/products', (req, res) => {
