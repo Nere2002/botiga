@@ -1,18 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {ProductService} from "../product.service";
-import {CartService} from "../cart.service";
-import {BillService} from "../bill.service";
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from "../product.service";
+import { CartService } from "../cart.service";
+import { BillService } from "../bill.service";
 import { AuthService } from "../auth.service";
-import {Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
-import {WalletService} from "../wallet.service";
+import { Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { WalletService } from "../wallet.service";
+import Web3 from "web3";
 
 class Product {
-  name= ' ' ;
-  description= ' ';
-  price= ' ';
+  name = '';
+  description = '';
+  price = '';
   id!: number;
-  quantity=0;
+  quantity = 0;
   cryptoPrice!: number;
 }
 
@@ -26,17 +27,17 @@ export class WelcomeComponent implements OnInit {
   productsInCart: Product[] = [];
   total: number = 0;
   userId: any;
-  quantityTotal: number=0;
+  quantityTotal: number = 0;
 
 
   constructor(
-      private productService: ProductService ,
-      private cartService: CartService,
-      private billService: BillService,
-      private authService: AuthService,
-      private router: Router,
-      private http: HttpClient,
-      private walletService:WalletService
+    private productService: ProductService,
+    private cartService: CartService,
+    private billService: BillService,
+    private authService: AuthService,
+    private router: Router,
+    private http: HttpClient,
+    private walletService: WalletService
 
   ) { }
 
@@ -55,8 +56,6 @@ export class WelcomeComponent implements OnInit {
         }
       )
 
-    //this.userId = this.authService.getUserId();
-
     this.authService.getUserId().subscribe(
       userId => {
         this.userId = userId;
@@ -69,7 +68,8 @@ export class WelcomeComponent implements OnInit {
     this.getBitcoinPriceInEuros();
 
   }
-// ------------------------ AÑADIR CARRITO ---------------------------------
+
+  // ------------------------ AÑADIR CARRITO ---------------------------------
 
   addToCart(productId: number, quantity: number): void {
     const product = this.products.find(p => p.id === productId);
@@ -83,18 +83,14 @@ export class WelcomeComponent implements OnInit {
         // Si el producto no está en el carrito, añadirlo con la cantidad
         product.quantity = quantity;
         this.productsInCart.push(product);
-
       }
 
       this.total += +product.price * quantity;
-      this.quantityTotal+= quantity;
-
+      this.quantityTotal += quantity;
     }
   }
 
   // ----------------------------- CRIPTOMONEDA --------------------------------
-
-
 
   getBitcoinPriceInEuros(): void {
     const apiUrl = 'https://api.coincap.io/v2/assets/bitcoin';
@@ -117,11 +113,8 @@ export class WelcomeComponent implements OnInit {
     });
   }
 
+  // ---------------------------- Borrar carrito -----------------------------
 
-
-
-
-// ---------------------------- Borrar carrito -----------------------------
   removeFromCart(productId: number): void {
     const index = this.productsInCart.findIndex(p => p.id === productId);
     if (index !== -1) {
@@ -130,9 +123,7 @@ export class WelcomeComponent implements OnInit {
     }
   }
 
-
-// ----------------------------- AÑADIR AL CARRITO -----------------------------------------------
-  cryptoValue: any;
+  // ----------------------------- AÑADIR AL CARRITO -----------------------------------------------
 
   buyCart(): void {
     // Create a new invoice with the user ID and total
@@ -181,26 +172,70 @@ export class WelcomeComponent implements OnInit {
 
     // Clear the cart after saving the items
     this.clearCart();
-}
+  }
 
   clearCart(): void {
     this.productsInCart = [];
     this.total = 0;
   }
 
-  openWallet(): void {
-    const isAuthenticated = this.walletService.isAuthenticated(); // Verificar si el usuario ya está autenticado en la wallet
-    if (!isAuthenticated) {
-      window.open('https://www.chivowallet.com/wallet/login', '_blank'); // Abrir la página de inicio de sesión de la wallet en una nueva ventana o pestaña
-    }
+  purchaseWithCrypto(): void {
+    const web3 = new Web3(window.ethereum);
+
+    // Obtener las cuentas disponibles en MetaMask
+    web3.eth.getAccounts().then(accounts => {
+      if (accounts.length > 0) {
+        const userWalletAddress = accounts[0]; // Obtener la primera cuenta como dirección de billetera del usuario
+
+        const totalInEthers = this.total / 1e18; // Convertir el valor total a ethers (18 decimales)
+
+        this.sendTransaction(userWalletAddress, totalInEthers)
+          .then(transactionHash => {
+            // Transacción enviada exitosamente
+            console.log('Transaction hash:', transactionHash);
+
+            // Realiza las acciones necesarias después de la compra, como limpiar el carrito y redirigir a una página de confirmación
+            this.clearCart();
+
+          })
+          .catch(error => {
+            // Error al enviar la transacción
+            console.error('Error sending transaction:', error);
+          });
+      } else {
+        // No se encontraron cuentas en MetaMask
+        console.error('No se encontraron cuentas en MetaMask.');
+      }
+    });
   }
 
+// ...
 
+  userWalletAddress: string = '0x5134D6782c79e416933649C6A2e7e0b21b6D1899'; // Declaración de la variable userWalletAddress
 
+  async sendTransaction(toAddress: string, value: number): Promise<string> {
+    try {
+      // Comprobar si Metamask está instalado y disponible
+      if (typeof window.ethereum === 'undefined') {
+        throw new Error('Metamask is not installed or not available');
+      }
 
+      // Crear una transacción y enviarla usando la API de Metamask
+      const transaction = {
+        from: this.userWalletAddress,
+        to: toAddress,
+        value: '0x' + (value * Math.pow(10, 18)).toString(16) // Convertir el valor a wei (18 decimales)
+      };
 
+      const transactionHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [transaction]
+      });
 
-
-
-
-} // -------------------------------- FIN COMPONENTE -----------------------------------------------
+      return transactionHash;
+    } catch (error) {
+      console.error('Error sending transaction:', error);
+      throw error;
+    }
+  }
+}
