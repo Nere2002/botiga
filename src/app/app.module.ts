@@ -9,6 +9,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import {FormsModule} from "@angular/forms";
 import { RegisterComponent } from './register/register.component';
 import { FormularioComponent } from './formulario/formulario.component';
+import { ProductListComponent } from './product-list/product-list.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormularioComponent } from './formulario/formulario.component';
     LoginComponent,
     WelcomeComponent,
     RegisterComponent,
-    FormularioComponent
+    FormularioComponent,
+    ProductListComponent
   ],
   imports: [
     BrowserModule,

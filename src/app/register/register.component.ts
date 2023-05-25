@@ -14,6 +14,7 @@ export class RegisterComponent {
   email: string = '';
   errorMessage: string = '';
 
+
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
   onSubmit() {
@@ -22,10 +23,10 @@ export class RegisterComponent {
       password: this.password,
       email: this.email
     };
-
     this.authService.register(user)
       .subscribe(
         result => {
+            this.authService.userId = result.userId; // Guarda el ID del usuario en el servicio AuthService
           console.log('Usuario registrado exitosamente');
           this.router.navigate(['/welcome']);
         },

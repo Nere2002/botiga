@@ -119,16 +119,22 @@ export class WelcomeComponent implements OnInit {
     });
   }
 
-
-
-
-
+  
 // ---------------------------- Borrar carrito -----------------------------
   removeFromCart(productId: number): void {
     const index = this.productsInCart.findIndex(p => p.id === productId);
     if (index !== -1) {
-      const removedProduct = this.productsInCart.splice(index, 1)[0];
-      this.total -= +removedProduct.price;
+      const removedProduct = this.productsInCart[index];
+      const quantity = removedProduct.quantity; // Obtener la cantidad del producto eliminado
+      if (quantity > 1) {
+        // Si la cantidad del producto es mayor a 1, disminuir la cantidad en 1
+        removedProduct.quantity -= 1;
+      } else {
+        // Si la cantidad del producto es 1, eliminar el producto del carrito
+        this.productsInCart.splice(index, 1);
+      }
+      this.total -= +removedProduct.price; // Restar el precio del producto eliminado
+      this.quantityTotal -= 1; // Restar 1 del total de la cantidad
     }
   }
 
@@ -190,12 +196,7 @@ export class WelcomeComponent implements OnInit {
     this.total = 0;
   }
 
-  openWallet(): void {
-    const isAuthenticated = this.walletService.isAuthenticated(); // Verificar si el usuario ya está autenticado en la wallet
-    if (!isAuthenticated) {
-      window.open('https://www.chivowallet.com/wallet/login', '_blank'); // Abrir la página de inicio de sesión de la wallet en una nueva ventana o pestaña
-    }
-  }
+
 
 
 

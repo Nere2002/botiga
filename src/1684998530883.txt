@@ -1,3 +1,0 @@
-Nombre: undefined 
-Email: undefined
-Consulta: undefined

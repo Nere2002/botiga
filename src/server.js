@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
 const session = require('express-session');
-const fs = require('fs');
+
 const multer = require('multer');
 //const router = express.Router();
+const productApi = require('./productApi');
 
 const app = express();
 app.use(express.json());
@@ -38,7 +39,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-
+const fs = require('fs');
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -53,7 +54,8 @@ app.post('/login', (req, res) => {
 
       // Almacena el ID del usuario en la sesión
       req.session.userId = userId;
-
+      const logMessage = `Timestamp: ${new Date().toLocaleString()}, User: ${username}, Action: Inicio sesion\n`;
+      fs.appendFileSync('log.txt', logMessage);
 
       res.json({ success: true, userId: req.session.userId }); // Devuelve el ID del usuario al cliente
     }
@@ -66,7 +68,7 @@ app.post('/register', (req, res) => {
 
   // Validar que el nombre de usuario, contraseña y correo no estén vacíos
   if (!username || !password || !email) {
-    res.json(400).send('El nombre de usuario, contraseña y correo son requeridos');
+    res.status(400).json('El nombre de usuario, contraseña y correo son requeridos');
     return;
   }
 
@@ -78,10 +80,10 @@ app.post('/register', (req, res) => {
       return;
     }
 
-   /* if (results.length > 0) {
-      res.status(409).send('El nombre de usuario ya está en uso');
+    if (results.length > 0) {
+      res.status(409).json('El nombre de usuario ya está en uso');
       return;
-    }*/
+    }
 console.log(email);
     // Insertar el nuevo usuario en la tabla de usuarios
     connection.query('INSERT INTO usuarios (username, password, email) VALUES (?, ?, ?)', [username, password, email], (error, results) => {
@@ -89,29 +91,39 @@ console.log(email);
         console.error('Error al insertar el nuevo usuario: ', error);
         res.json(500).send('Error al insertar el nuevo usuario');
         return;
+      } else {
+        const userId = results[0].id; // Obtiene el ID del usuario
+
+        // Almacena el ID del usuario en la sesión
+        req.session.userId = userId;
+        const logMessage = `Timestamp: ${new Date().toLocaleString()}, User: ${username}, Action: Register\n`;
+        fs.appendFileSync('log.txt', logMessage);
+
+        res.json({ success: true, userId: req.session.userId }); // Devuelve el ID del usuario al cliente
       }
 
-      res.json(201).send('Usuario registrado exitosamente');
+      res.status(201).json('Usuario registrado exitosamente');
     });
   });
 });
 
 //-------------------- logs guardar ---------------------
 
-app.post('/logs', (req, res) => {
+
+/*app.post('/logs', (req, res) => {
   const { logEntry } = req.body;
 
   // Escribe el logEntry en el archivo
-  fs.appendFile('logs.txt', logEntry + '\n', (err) => {
+  fs.appendFile('/logs.txt', logEntry + '\n', (err) => {
     if (err) {
       console.error('Error al escribir en el archivo de logs:', err);
-      res.json(500).send('Error al escribir en el archivo de logs');
+      res.status(500).send('Error al escribir en el archivo de logs');
     } else {
       console.log('Log guardado exitosamente:', logEntry);
-      res.json(200);
+      res.sendStatus(200);
     }
   });
-});
+});*/
 
 // --------------------- Guardar formulario -----------------------
 
@@ -137,8 +149,18 @@ app.post('/api/guardar-consulta', (req, res) => {
 });
 
 //module.exports = router;
+//-------------------- Productos API -------------------------------------
+app.get('/productsApi', (req, res) => {
+  productApi.getProductData()
+    .then(products => {
+      res.json(products);
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'Error al obtener los productos' });
+    });
+});
 
-
+//-------------------- Products Base de datos ----------------------------
 app.get('/products', (req, res) => {
   connection.query('SELECT * FROM products', (error, results) => {
     if (error) {
@@ -182,7 +204,6 @@ app.post('/bills', (req, res) => {
 
 app.post('/cart', (req, res) => {
   const { user_id, product_id, quantity } = req.body;
-
   // Obtener el ID de la última factura creada por el usuario
   const selectInvoiceQuery = 'SELECT id FROM factura WHERE user_id = ? ORDER BY id DESC LIMIT 1';
   connection.query(selectInvoiceQuery, [user_id], (error, results) => {
@@ -206,7 +227,6 @@ app.post('/cart', (req, res) => {
               factura_id
               // Otras propiedades del elemento del carrito según tus necesidades
             };
-
             res.json(newCartItem);
           }
         });
