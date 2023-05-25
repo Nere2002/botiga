@@ -9,6 +9,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import {FormsModule} from "@angular/forms";
 import { RegisterComponent } from './register/register.component';
 import { FormularioComponent } from './formulario/formulario.component';
+import { GraficoComponent} from "./grafico/grafico.component";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormularioComponent } from './formulario/formulario.component';
     LoginComponent,
     WelcomeComponent,
     RegisterComponent,
-    FormularioComponent
+    FormularioComponent,
+    GraficoComponent
   ],
   imports: [
     BrowserModule,

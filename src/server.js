@@ -214,11 +214,19 @@ app.post('/cart', (req, res) => {
   });
 });
 
+app.get('/grafico', (req, res) => {
+  const query = 'SELECT * FROM grafico';
 
-
-
-
-
+  // Ejecuta la consulta en la base de datos
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al obtener los datos del gráfico' });
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 
 app.listen(3000, () => {

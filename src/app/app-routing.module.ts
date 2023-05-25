@@ -5,12 +5,14 @@ import { LoginComponent } from './login/login.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import {RegisterComponent} from "./register/register.component";
 import {FormularioComponent} from "./formulario/formulario.component";
+import {GraficoComponent} from "./grafico/grafico.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'welcome', component: WelcomeComponent },
   { path: 'formulario', component: FormularioComponent },
+  { path: 'grafico', component: GraficoComponent},
 ];
 
 @NgModule({
