@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth.service";
 import { Router } from '@angular/router';
-import { ethers } from 'ethers';
+// @ts-ignore
 import Web3 from "web3";
 
 declare global {
