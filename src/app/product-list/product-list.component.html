@@ -1,4 +1,3 @@
-<p>product-list works!</p>
 
 <h2>Lista de productos API</h2>
 <!--
@@ -7,9 +6,9 @@
     <h3>{{ product.name }}</h3>
     <p>Precio: {{ product.price }}</p>
     <p>Descripción: {{ product.description }}</p>
-  </li>
-</ul>
+  </li>>
 -->
+<!--</ul-->
 <head>
   <title>Galería de productos</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -51,3 +50,15 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<br>
+
+
+<h2 style="border-bottom: 1px solid black;">Trabajadores de ElectroMundo</h2>
+<div class="user-container" *ngIf="user">
+  <img class="user-image" [src]="user.picture.large" alt="Foto de perfil" />
+  <p class="user-name">{{ user.name.first }} {{ user.name.last }}</p>
+  <p class="user-age">{{ user.dob.age }} años</p>
+  <p class="user-email">{{ user.email }}</p>
+  <p class="user-nationality">{{ user.nat }}</p>
+</div>

@@ -9,3 +9,5 @@ Timestamp: 25/5/2023, 20:07:10, User: e, Action: Register
 Timestamp: 25/5/2023, 20:18:58, User: nerea, Action: Inicio sesion
 Timestamp: 25/5/2023, 20:34:03, User: nerea, Action: Inicio sesion
 Timestamp: 25/5/2023, 21:23:08, User: nerea, Action: Inicio sesion
+Timestamp: 26/5/2023, 9:19:09, User: nerea, Action: Inicio sesion
+Timestamp: 26/5/2023, 10:09:48, User: nerea, Action: Inicio sesion

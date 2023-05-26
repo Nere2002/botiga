@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'welcome', component: WelcomeComponent },
   { path: 'formulario', component: FormularioComponent },
+
 ];
 
 @NgModule({
