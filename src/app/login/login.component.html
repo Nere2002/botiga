@@ -5,7 +5,6 @@
 </div>
 
 <div class="nav-container">
-  <a routerLink="/wallet" class="nav-button">Wallet</a>
   <a routerLink="/formulario" class="nav-button">Formulario</a>
   <a routerLink="/grafico" class="nav-button">Grafico</a>
   <a routerLink="/login" class="nav-button">Inicio sesion</a>
@@ -28,7 +27,7 @@
           <label for="password">Contraseña</label>
           <input id="password" type="password" [(ngModel)]="password" name="password" required>
 
-          <button type="submit" title="Ingresar" name="Ingresar">Inicio</button>
+          <button type="submit" title="Ingresar" name="Ingresar" (click)="loginWithMetamask()" >Inicio</button>
 
         </form>
         <div id="routing">
